@@ -9,21 +9,24 @@ from two_layer_net import TwoLayerNet
 # 读入数据
 (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
 
+# 实例化一个神经网络模型
 network = TwoLayerNet(input_size=784, hidden_size=50, output_size=10)
 
 iters_num = 10000  # 适当设定循环的次数
-train_size = x_train.shape[0]
-batch_size = 100
-learning_rate = 0.1
+train_size = x_train.shape[0]  # 训练数据的数量 60000
+batch_size = 100  # 每次训练的样本数量
+learning_rate = 0.1  # 学习率
 
 train_loss_list = []
 train_acc_list = []
 test_acc_list = []
 
-iter_per_epoch = max(train_size / batch_size, 1)
+iter_per_epoch = max(train_size / batch_size, 1)  # 每个epoch的迭代次数 600
+# 每个epoch的迭代次数 = 训练数据的数量 / 每次训练的样本数量
 
 for i in range(iters_num):
-    batch_mask = np.random.choice(train_size, batch_size)
+    # 从0到train_size-1的范围内随机选择batch_size个不重复的索引
+    batch_mask = np.random.choice(train_size, batch_size)  
     x_batch = x_train[batch_mask]
     t_batch = t_train[batch_mask]
     
@@ -38,7 +41,7 @@ for i in range(iters_num):
     loss = network.loss(x_batch, t_batch)
     train_loss_list.append(loss)
     
-    if i % iter_per_epoch == 0:
+    if i % iter_per_epoch == 0:  # 每次所有数据都被训练了一遍后，计算精确率
         train_acc = network.accuracy(x_train, t_train)
         test_acc = network.accuracy(x_test, t_test)
         train_acc_list.append(train_acc)
